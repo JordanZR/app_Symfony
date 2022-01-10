@@ -1,0 +1,26 @@
+{% extends 'menu.html.twig' %}
+
+{% block donations %}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Institution</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for donation in donations %}
+                <tr>
+                    <th scope="row">{{ donation.id }}</th>
+                    <td>{{ donation.name }}</td>
+                    <td>{{ donation.date }}</td>
+                    <td>$ {{ donation.amount }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

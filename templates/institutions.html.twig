@@ -1,0 +1,25 @@
+{% extends 'menu.html.twig' %}
+
+{% block institutions %}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Country</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for insti in institutions %}
+                <tr>
+                    <th scope="row">{{ insti.id }}</th>
+                    <td>{{ insti.name }}</td>
+                    <td>{{ insti.country }}</td>
+                    <td><button class="btn btn-primary" type="submit"><a style="text-decoration: none; color: white" href="{{ path('app_donate', {idinsti: insti.id}) }}">Donate</a></button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
