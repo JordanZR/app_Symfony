@@ -1,5 +1,72 @@
 .credit-card-div  span { padding-top:10px; }
 .credit-card-div .small-font { font-size:9px; }
 .credit-card-div .pad-adjust { padding-top:10px; }
-#payment-form{ margin-top: 2em; }
-.buttons{margin-top: 1em;}
+#payment-form{ margin-top: 2em;}
+.buttons{margin-top: 1em; margin-bottom: 2em}
+.container{
+    margin-top: 5em;
+}
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    height:100%;
+}
+footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:8em;
+}
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.topnav .icon {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    .topnav a:not(:first-child) {display: none;}
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .topnav.responsive {position: relative;}
+    .topnav.responsive .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+    footer{
+        position: relative;
+    }
+}

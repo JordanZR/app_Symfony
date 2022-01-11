@@ -46,14 +46,17 @@ class LoginController extends AbstractController
                     ]
                 );
                 //Comprobamos si el usuario existe
-                if(password_verify($user->getPassword(),$checkedUser->getPassword()) && $checkedUser){
-                    //Guarda el ID y el nombre del usuario
-                    $this->requestStack->getSession()->set('id', $checkedUser->getId());
-                    $this->requestStack->getSession()->set('name', $checkedUser->getName());
-                    $this->counter($doctrine);
-                    return $this->render('menu.html.twig',[
-                        'name'=>$this->requestStack->getSession()->get('name')
-                    ]);
+                if($checkedUser){
+                    if(password_verify($user->getPassword(),$checkedUser->getPassword())){
+                        $this->requestStack->getSession()->set('id', $checkedUser->getId());
+                        $this->requestStack->getSession()->set('name', $checkedUser->getName());
+                        return $this->render('menu.html.twig',[
+                            'name'=>$this->requestStack->getSession()->get('name'),
+                            'visits'=>$this->counter($doctrine)
+                        ]);
+                    }else{
+                        return new Response('Incorrect information');
+                    }
                 }else{
                     return new Response('Incorrect information');
                 }
@@ -69,7 +72,6 @@ class LoginController extends AbstractController
             );
         }
     }
-
     /**
      * @Route("/sign", name="app_sign")
      */
@@ -94,7 +96,7 @@ class LoginController extends AbstractController
                     $session = $this->requestStack->getSession();
                     $session->set('id', $user->getId());
                     $session->set('name', $user->getName());
-                    $this->counter($doctrine);
+                    //$this->counter($doctrine);
                     return $this->render('menu.html.twig',[
                         'name'=>$session->get('name')
                     ]);
@@ -153,7 +155,7 @@ class LoginController extends AbstractController
                 }
             }else{
                 $this->requestStack->getSession()->set('idinsti', $idinsti);
-                return $this->renderForm('/forms/donation.html.twig',
+                return $this->renderForm('/forms/donate.html.twig',
                     [
                         'form'=>$form,
                         'name'=>strval($this->requestStack->getSession()->get('name')),
@@ -180,9 +182,6 @@ class LoginController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/counter", name="app_counter", methods={"GET"})
-     */
     public function counter(ManagerRegistry $doctrine){
         $counter = new Counter();
         date_default_timezone_set('GMT');
@@ -197,7 +196,11 @@ class LoginController extends AbstractController
             $todayCounter->setTotal($todayCounter->getTotal()+1);
             $todayCounter->setDaily($todayCounter->getDaily() + 1);
             $doctrine->getManager()->flush();
-            return new Response('Ya existía un contador para HOY');
+            $array = [
+                'Daily'=>$todayCounter->getDaily(),
+                'Total'=>$todayCounter->getTotal()
+            ];
+            return $array;
         }else{
             //Buscamos el total del contador más reciente
             $checkCounter = $doctrine->getRepository(Counter::class)->findAll();
@@ -211,13 +214,21 @@ class LoginController extends AbstractController
                 $counter->setDaily(1);
                 $doctrine->getManager()->persist($counter);
                 $doctrine->getManager()->flush();
-                return new Response('Ya existía una contador ANTERIOR');
+                $array = [
+                    'Daily'=>$counter->getDaily(),
+                    'Total'=>$counter->getTotal()
+                ];
+                return $array;
             }else{
                 $counter->setTotal(1);
                 $counter->setDaily(1);
                 $doctrine->getManager()->persist($counter);
                 $doctrine->getManager()->flush();
-                return new Response('Se creó un contador desde 0');
+                $array = [
+                    'Daily'=>1,
+                    'Total'=>1
+                ];
+                return $array;
             }
         }
 
