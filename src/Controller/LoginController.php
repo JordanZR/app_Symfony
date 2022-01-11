@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Counter;
 use App\Entity\Donation;
 use App\Entity\Institution;
 use App\Entity\Usuario;
@@ -49,6 +50,7 @@ class LoginController extends AbstractController
                     //Guarda el ID y el nombre del usuario
                     $this->requestStack->getSession()->set('id', $checkedUser->getId());
                     $this->requestStack->getSession()->set('name', $checkedUser->getName());
+                    $this->counter($doctrine);
                     return $this->render('menu.html.twig',[
                         'name'=>$this->requestStack->getSession()->get('name')
                     ]);
@@ -92,6 +94,7 @@ class LoginController extends AbstractController
                     $session = $this->requestStack->getSession();
                     $session->set('id', $user->getId());
                     $session->set('name', $user->getName());
+                    $this->counter($doctrine);
                     return $this->render('menu.html.twig',[
                         'name'=>$session->get('name')
                     ]);
@@ -175,6 +178,49 @@ class LoginController extends AbstractController
         }else{
             return $this->login($doctrine,$request,$validator);
         }
+    }
+
+    /**
+     * @Route("/counter", name="app_counter", methods={"GET"})
+     */
+    public function counter(ManagerRegistry $doctrine){
+        $counter = new Counter();
+        date_default_timezone_set('GMT');
+        $counter->setDate(strval(date('m.d.y')));
+        //$counter->setDate('01.10.22');
+        //Comprobamos si existe un contador para la fecha actual
+        $todayCounter = $doctrine->getRepository(Counter::class)->findOneBy(
+            ['date'=>$counter->getDate()]
+        );
+
+        if($todayCounter){
+            $todayCounter->setTotal($todayCounter->getTotal()+1);
+            $todayCounter->setDaily($todayCounter->getDaily() + 1);
+            $doctrine->getManager()->flush();
+            return new Response('Ya existía un contador para HOY');
+        }else{
+            //Buscamos el total del contador más reciente
+            $checkCounter = $doctrine->getRepository(Counter::class)->findAll();
+            $rows = count($checkCounter);
+            //return new Response(strval($rows));
+            if($rows > 0){
+                $checkCounter = $doctrine->getRepository(Counter::class)->findOneBy([
+                    'id'=>$rows
+                ]);
+                $counter->setTotal($checkCounter->getTotal()+1);
+                $counter->setDaily(1);
+                $doctrine->getManager()->persist($counter);
+                $doctrine->getManager()->flush();
+                return new Response('Ya existía una contador ANTERIOR');
+            }else{
+                $counter->setTotal(1);
+                $counter->setDaily(1);
+                $doctrine->getManager()->persist($counter);
+                $doctrine->getManager()->flush();
+                return new Response('Se creó un contador desde 0');
+            }
+        }
+
     }
 
 }
