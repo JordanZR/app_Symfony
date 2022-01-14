@@ -8,12 +8,12 @@
                 <!-- Agregamos un label y un input para cada atributo de la clase Usuario -->
                 {{ form_start(form, {'action': path('app_sign'), 'method':'POST'}) }}
                 <div class="form-group">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name, {'attr':{'class':'form-control'}, 'type': 'text'}) }}
+                    <label>Name (Only letters allowed)</label>
+                    <input class="form-control" type="text" name="name" required pattern="[A-z]+">
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.surname) }}
-                    {{ form_widget(form.surname, {'attr':{'class':'form-control'}}) }}
+                    <label>Surname (Only letters allowed)</label>
+                    <input class="form-control" type="text" name="surname" required pattern="[A-z]+">
                 </div>
                 <div class="form-group">
                     {{ form_label(form.email) }}

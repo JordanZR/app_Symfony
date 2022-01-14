@@ -6,3 +6,8 @@ function myFunction() {
         x.className = "topnav";
     }
 }
+
+function prueba() {
+    console.log('Probando')
+}
+

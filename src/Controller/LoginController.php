@@ -81,7 +81,7 @@ class LoginController extends AbstractController
         $form = $this->createForm(UsuarioType::class, $user);
         $user = $form->handleRequest($request)->getData();
         if($form->isSubmitted() && $form->isValid()){
-            $errors = $validator->validate($user);        $errors = $validator->validate($user);
+            $errors = $validator->validate($user);
             if(count($errors) == 0){
                 $checkUser = $doctrine->getManager()->getRepository(Usuario::class)->findOneBy(
                     ['email'=>$user->getEmail()
@@ -89,6 +89,8 @@ class LoginController extends AbstractController
                 );
                 if(!$checkUser){
                     $user->setPassword(password_hash($user->getPassword(),PASSWORD_BCRYPT));
+                    $user->setName($_POST['name']);
+                    $user->setSurname($_POST['surname']);
                     $doctrine->getManager()->persist($user);
                     $doctrine->getManager()->flush();
 
@@ -98,7 +100,8 @@ class LoginController extends AbstractController
                     $session->set('name', $user->getName());
                     //$this->counter($doctrine);
                     return $this->render('menu.html.twig',[
-                        'name'=>$session->get('name')
+                        'name'=>$this->requestStack->getSession()->get('name'),
+                        'visits'=>$this->counter($doctrine)
                     ]);
                 }else{
                     return new Response('Email already exists');
