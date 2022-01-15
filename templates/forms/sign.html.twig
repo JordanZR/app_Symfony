@@ -1,32 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block login %}
-    <div class="container">
-        <div class="row">
-            <h3 class="mt-5 mb-5">Login de usuarios</h3>
-            <div class="col-md-6 offset-md-3">
-                <!-- Agregamos un label y un input para cada atributo de la clase Usuario -->
-                {{ form_start(form, {'action': path('app_sign'), 'method':'POST'}) }}
-                <div class="form-group">
-                    <label>Name (Only letters allowed)</label>
-                    <input class="form-control" type="text" name="name" required pattern="[A-z]+">
-                </div>
-                <div class="form-group">
-                    <label>Surname (Only letters allowed)</label>
-                    <input class="form-control" type="text" name="surname" required pattern="[A-z]+">
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.email) }}
-                    {{ form_widget(form.email, {'attr':{'class':'form-control'},'type': 'email'}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.password) }}
-                    {{ form_widget(form.password, {'attr':{'class':'form-control'},'type':'password'}) }}
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-info mt-2">Submit</button>
-                </div>
+    <div class="form-signin" id="signin">
+        {{ form_start(form, {'action': path('app_sign'), 'method':'POST'}) }}
+        <h1 class="h3 mb-3 fw-normal">Please Sign in</h1>
+            <div class="form-floating">
+                <input class="form-control" type="text" name="name" required pattern="[A-z]+">
+                <label>Name (Only letters allowed)</label>
             </div>
-        </div>
+            <div class="form-floating">
+                <input class="form-control" type="text" name="surname" required pattern="[A-z]+">
+                <label>Surname (Only letters allowed)</label>
+            </div>
+            <div class="form-floating">
+                {{ form_widget(form.email, {'attr':{'class':'form-control'},'type': 'email'}) }}
+                <label>Email</label>
+            </div>
+            <div class="form-floating">
+                {{ form_widget(form.password, {'attr':{'class':'form-control'},'type':'password'}) }}
+                <label>Password</label>
+            </div>
+                <button type="submit" class="w-100 btn btn-lg btn-success">Register</button>
+                <p class="mt-5 mb-3 text-muted">&copy; Telus International 2022</p>
     </div>
 {% endblock %}

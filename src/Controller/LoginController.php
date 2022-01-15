@@ -48,11 +48,12 @@ class LoginController extends AbstractController
                 //Comprobamos si el usuario existe
                 if($checkedUser){
                     if(password_verify($user->getPassword(),$checkedUser->getPassword())){
+                        $contador = $this->counter($doctrine);
                         $this->requestStack->getSession()->set('id', $checkedUser->getId());
                         $this->requestStack->getSession()->set('name', $checkedUser->getName());
                         return $this->render('menu.html.twig',[
                             'name'=>$this->requestStack->getSession()->get('name'),
-                            'visits'=>$this->counter($doctrine)
+                            'visits'=>$contador
                         ]);
                     }else{
                         return new Response('Incorrect information');
@@ -95,13 +96,13 @@ class LoginController extends AbstractController
                     $doctrine->getManager()->flush();
 
                     //Guardar el ID y el nombre del usuario
-                    $session = $this->requestStack->getSession();
-                    $session->set('id', $user->getId());
-                    $session->set('name', $user->getName());
+                    $contador = $this->counter($doctrine);
+                    $this->requestStack->getSession()->set('id', $user->getId());
+                    $this->requestStack->getSession()->set('name', $user->getName());
                     //$this->counter($doctrine);
                     return $this->render('menu.html.twig',[
                         'name'=>$this->requestStack->getSession()->get('name'),
-                        'visits'=>$this->counter($doctrine)
+                        'visits'=>$contador
                     ]);
                 }else{
                     return new Response('Email already exists');
@@ -128,7 +129,8 @@ class LoginController extends AbstractController
             return $this->render('institutions.html.twig',
                 [
                     'institutions'=>$institutions,
-                    'name' =>$this->requestStack->getSession()->get('name')
+                    'name' =>$this->requestStack->getSession()->get('name'),
+                    'visits'=>$this->counter($doctrine)
                 ]);
         }else{
             return $this->login($doctrine,$request,$validator);
@@ -162,6 +164,7 @@ class LoginController extends AbstractController
                     [
                         'form'=>$form,
                         'name'=>strval($this->requestStack->getSession()->get('name')),
+                        'visits'=>$this->counter($doctrine)
                     ]);
             }
         }else{
@@ -178,7 +181,8 @@ class LoginController extends AbstractController
             return $this->render('donations.html.twig',
                 [
                     'donations'=>$donations,
-                    'name' =>$this->requestStack->getSession()->get('name')
+                    'name' =>$this->requestStack->getSession()->get('name'),
+                    'visits'=>$this->counter($doctrine)
                 ]);
         }else{
             return $this->login($doctrine,$request,$validator);
@@ -196,8 +200,11 @@ class LoginController extends AbstractController
         );
 
         if($todayCounter){
-            $todayCounter->setTotal($todayCounter->getTotal()+1);
-            $todayCounter->setDaily($todayCounter->getDaily() + 1);
+            //Si ya se ha iniciado sesión ya no suma más visitas
+            if($this->requestStack->getSession()->get('id')==0){
+                $todayCounter->setTotal($todayCounter->getTotal()+1);
+                $todayCounter->setDaily($todayCounter->getDaily() + 1);
+            }
             $doctrine->getManager()->flush();
             $array = [
                 'Daily'=>$todayCounter->getDaily(),

@@ -10,6 +10,7 @@ body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
     height:100%;
+    background-color: #fafafa;
 }
 footer{
     position:fixed;
@@ -44,6 +45,29 @@ footer{
 
 .topnav .icon {
     display: none;
+}
+
+/* Login */
+
+.form-signin {
+    width: 100%;
+    max-width: 20%;
+    min-width: 200px;
+    margin: auto;
+    margin-top: 10%;
+    text-align: center;
+}
+
+#signin{
+    margin-top: 5%;
+}
+
+.form-signin button{
+    margin-bottom: 0.5em;
+}
+
+.form-floating input{
+    margin-bottom: 0.5em;
 }
 
 @media screen and (max-width: 600px) {

@@ -10,23 +10,23 @@
 
                     <div class="row ">
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="Enter Card Number" />
+                            <input type="text" class="form-control" required pattern="[0-9]{4}[-][0-9]{4}[-][0-9]{4}[-][0-9]{4}" placeholder="1234-5678-1234-5678" />
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-3 col-sm-3 col-xs-3">
                             <span class="help-block text-muted small-font" > Expiry Month</span>
-                            <input type="text" class="form-control" placeholder="MM" />
+                            <input type="number" min="1" max="12" required class="form-control" placeholder="MM" />
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-3">
                             <span class="help-block text-muted small-font" >  Expiry Year</span>
-                            <input type="text" class="form-control" placeholder="YY" />
+                            <input type="number" min="22" max="27" required class="form-control" placeholder="YY" />
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-3 col-sm-3 col-xs-3">
                             <span class="help-block text-muted small-font" >  CCV</span>
-                            <input type="text" class="form-control" placeholder="CCV" />
+                            <input type="text" pattern="[0-9]{3}" required class="form-control" placeholder="CCV" />
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-3">
                             <span class="help-block text-muted small-font" >  Amount</span>
