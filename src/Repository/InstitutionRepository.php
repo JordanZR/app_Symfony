@@ -19,32 +19,16 @@ class InstitutionRepository extends ServiceEntityRepository
         parent::__construct($registry, Institution::class);
     }
 
-    // /**
-    //  * @return Institution[] Returns an array of Institution objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    /**
+        * @return Institution[]
     */
+    public function findInsti($date)
+    {
+        $em = $this->getEntityManager();
+        $query = $em->createQuery(
+            'SELECT i.id, i.name, i.country FROM App\Entity\Institution i INNER JOIN App\Entity\Donation d WHERE d.date >= :date AND i.id = d.idinsti'
+        )->setParameter('date', $date);
+        return $query->getResult();
+    }
 
-    /*
-    public function findOneBySomeField($value): ?Institution
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

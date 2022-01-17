@@ -125,6 +125,8 @@ class LoginController extends AbstractController
      */
     public function checkInstitutions(ManagerRegistry $doctrine, Request $request, ValidatorInterface $validator){
         if($this->requestStack->getSession()->get('id') != 0){
+            //date_default_timezone_set('GMT');
+            //$MonthLater = date("Y-m-d", strtotime(date("Y-m-d") . "+ 1 month"));
             $institutions = $doctrine->getRepository(Institution::class)->findAll();
             return $this->render('institutions.html.twig',
                 [
@@ -149,7 +151,8 @@ class LoginController extends AbstractController
                     $donation->setIdinsti($this->requestStack->getSession()->get('idinsti'));
                     $donation->setIduser($this->requestStack->getSession()->get('id'));
                     date_default_timezone_set('GMT');
-                    $donation->setDate(date("m.d.y"));
+                    $donation->setDate(date("Y-m-d"));
+                    //$donation->setDate('2021-12-01');
                     $donation->setAmount($_POST['amount']);
 
                     $doctrine->getManager()->persist($donation);

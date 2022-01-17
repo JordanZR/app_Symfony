@@ -30,18 +30,18 @@
                         </div>
                         <div class="col-md-3 col-sm-3 col-xs-3">
                             <span class="help-block text-muted small-font" >  Amount</span>
-                            <input name="amount" class="form-control" type="number" step="0.01" min="0.01">
+                            <input name="amount" required class="form-control" type="number" step="0.01" min="0.01">
                         </div>
                     </div>
                     <div class="row ">
                         <div class="col-md-6 pad-adjust">
                             <span class="help-block text-muted small-font" >  Name on the card</span>
-                            <input type="text" class="form-control" placeholder="John Doe" />
+                            <input type="text" required class="form-control" placeholder="John Doe" />
                         </div>
                     </div>
                     <div class="buttons">
                         <button  type="submit" class="btn btn-success">Donate</button>
-                        <button type="button" class="btn btn-danger">Cancel</button>
+                        <button type="button" class="btn btn-danger"><a style="text-decoration: none; color:white" href="{{ path('app_inst') }}">Cancel</a></button>
                     </div>
                 </div>
             </div>
